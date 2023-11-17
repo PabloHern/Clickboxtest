@@ -6,16 +6,20 @@ import {
   AiFillPlusCircle,
 } from "react-icons/ai";
 import { useEffect } from "react";
-import useChangeCube from "@/hooks/useChangeCube";
-export default function BoxUI({ clickBox, cubes, setCubes, handleActive }) {
+export default function BoxUI({
+  clickBox,
+  cubes,
+  setCubes,
+  handleActive,
+  startRotation,
+  setColor,
+}) {
   const buttons = [
     { x: 0, y: 1.5, z: 0 },
     { x: 1.5, y: 0, z: 0 },
     { x: 0, y: -1.5, z: 0 },
     { x: -1.5, y: 0, z: 0 },
   ];
-  const { setRotationAngle, color, setColor, startRotation, rotationAngle } =
-    useChangeCube();
   const createCube = (index) => {
     if (index == 0) {
       const newCubes = [
@@ -109,7 +113,7 @@ export default function BoxUI({ clickBox, cubes, setCubes, handleActive }) {
         name="boxUiColorPicker"
         center
         position={[
-          clickBox.position.x - 2.5,
+          clickBox.position.x - 1.85,
           clickBox.position.y,
           clickBox.position.z,
         ]}

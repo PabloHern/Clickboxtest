@@ -8,17 +8,18 @@ import { useRef, useState, useEffect } from "react";
 const Experience = ({ groupRef }) => {
   const clicked = useRef();
   const cameraRef = useRef();
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(-1);
   const [cubes, setCubes] = useState([
     [0, 0, -3],
     [3, 0, -3],
   ]);
+
   const handleActive = (e, index) => {
     clicked.current = groupRef.current.getObjectByName(index);
     console.log(clicked.current);
 
     if (clicked.current !== undefined) {
-      setActive(true);
+      setActive(index);
       clicked.current.parent.updateWorldMatrix(true, true);
       clicked.current.parent.localToWorld(
         cameraRef.current.set(
@@ -28,7 +29,7 @@ const Experience = ({ groupRef }) => {
         ),
       );
     } else {
-      setActive(false);
+      setActive(-1);
       cameraRef.current.set(0, 0, 5.5);
     }
   };
@@ -38,7 +39,7 @@ const Experience = ({ groupRef }) => {
 
   useFrame((state, delta) => {
     if (cameraRef.current !== undefined) {
-      easing.damp3(state.camera.position, cameraRef.current, 0.4, delta);
+      easing.damp3(state.camera.position, cameraRef.current, 0.3, delta);
     }
   });
   return (
@@ -53,24 +54,14 @@ const Experience = ({ groupRef }) => {
               cubes={cubes}
               setCubes={setCubes}
               position={cubePos}
+              clicked={clicked.current}
               onClick={(e) => (e.stopPropagation(), handleActive(e, index))}
               onPointerMissed={(e) => handleActive(e, null)}
+              active={active}
             ></Clickbox>
           );
         })}
       </group>
-      {active ? (
-        <BoxUI
-          onPointerOver={(e) => {
-            e.stopPropagation();
-          }}
-          cubes={cubes}
-          setCubes={setCubes}
-          clickBox={clicked.current}
-        ></BoxUI>
-      ) : (
-        ""
-      )}
     </>
   );
 };

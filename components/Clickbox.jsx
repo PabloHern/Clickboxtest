@@ -4,18 +4,28 @@ Command: npx gltfjsx@6.2.13 clickbox001blend.gltf --transform
 Files: clickbox001blend.gltf [5.37KB] > clickbox001blend-transformed.glb [1.2KB] (78%)
 */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion as threeMotion } from "framer-motion-3d";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import useChangeCube from "@/hooks/useChangeCube";
+import BoxUI from "./BoxUI";
 export function Clickbox(props) {
   const { nodes, materials } = useGLTF(
     "models/clickbox/clickbox001blend-transformed.glb",
   );
-  const { rotationAngle, color, startRotation } = useChangeCube();
   const clickBox = useRef();
-
+  const [rotationAngle, setRotationAngle] = useState(0);
+  const startRotation = (dir) => {
+    console.log("wowowowo");
+    setRotationAngle((prevAngle) => {
+      console.log("prevAngle:", prevAngle);
+      const newAngle = prevAngle + (Math.PI / 2) * dir;
+      console.log("newAngle:", newAngle);
+      return newAngle;
+    });
+  };
+  const [color, setColor] = useState("#fff");
   useFrame(() => {
     if (Math.abs(clickBox.current.rotation.y - rotationAngle) > 0.001) {
       clickBox.current.rotation.y +=
@@ -43,6 +53,20 @@ export function Clickbox(props) {
           <meshStandardMaterial emissive={color} color={color} />
         </threeMotion.mesh>
       </group>
+      {props.active == props.name ? (
+        <BoxUI
+          onPointerOver={(e) => {
+            e.stopPropagation();
+          }}
+          cubes={props.cubes}
+          setColor={setColor}
+          setCubes={props.setCubes}
+          clickBox={clickBox.current}
+          startRotation={startRotation}
+        ></BoxUI>
+      ) : (
+        ""
+      )}
     </>
   );
 }
