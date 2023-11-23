@@ -17,11 +17,8 @@ export function Clickbox(props) {
   const clickBox = useRef();
   const [rotationAngle, setRotationAngle] = useState(0);
   const startRotation = (dir) => {
-    console.log("wowowowo");
     setRotationAngle((prevAngle) => {
-      console.log("prevAngle:", prevAngle);
       const newAngle = prevAngle + (Math.PI / 2) * dir;
-      console.log("newAngle:", newAngle);
       return newAngle;
     });
   };

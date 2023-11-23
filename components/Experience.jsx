@@ -16,7 +16,7 @@ const Experience = ({ groupRef }) => {
 
   const handleActive = (e, index) => {
     clicked.current = groupRef.current.getObjectByName(index);
-    console.log(clicked.current);
+    console.log(cubes);
 
     if (clicked.current !== undefined) {
       setActive(index);
